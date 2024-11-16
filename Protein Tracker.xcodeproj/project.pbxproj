@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		34D46D632CE8473C000F6BA7 /* ProteinTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D46D622CE8473C000F6BA7 /* ProteinTracker.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		34D46D462CE841AB000F6BA7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		34D46D342CE841A9000F6BA7 /* Protein Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Protein Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		34D46D452CE841AB000F6BA7 /* Protein TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Protein TrackerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		34D46D4F2CE841AB000F6BA7 /* Protein TrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Protein TrackerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		34D46D622CE8473C000F6BA7 /* ProteinTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinTracker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +80,7 @@
 		34D46D2B2CE841A9000F6BA7 = {
 			isa = PBXGroup;
 			children = (
+				34D46D622CE8473C000F6BA7 /* ProteinTracker.swift */,
 				34D46D362CE841A9000F6BA7 /* Protein Tracker */,
 				34D46D482CE841AB000F6BA7 /* Protein TrackerTests */,
 				34D46D522CE841AB000F6BA7 /* Protein TrackerUITests */,
@@ -236,6 +242,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34D46D632CE8473C000F6BA7 /* ProteinTracker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
