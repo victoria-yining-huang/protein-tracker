@@ -125,28 +125,64 @@ struct TodaysEntriesView: View {
                 .padding()
                 .background(Color.white)
                 .cornerRadius(8)
+                .swipeActions {
+                    // Swipe-to-delete action
+                    Button(role: .destructive, action: {
+                        deleteEntry(entry)  // Pass the entry to delete
+                    }) {
+                        Label("Delete", systemImage: "trash")
+                    }
+                    .tint(.red) // Set color of the delete button
+                }
             }
-            .onDelete(perform: deleteEntry) // Add swipe-to-delete functionality
         }
         .listStyle(PlainListStyle()) // Optional: Use plain list style for a cleaner look
+        .sheet(isPresented: $isEditing) {
+            VStack {
+                Text("Edit Protein Entry")
+                    .font(.title)
+                TextField("Amount", value: $updatedEntryAmount, format: .number)
+                    .keyboardType(.decimalPad)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+                    .padding()
+                
+                Button("Save") {
+                    saveEdit()
+                }
+                .padding()
+                .background(Color.green)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+                
+                Button("Cancel") {
+                    isEditing = false
+                }
+                .padding()
+                .background(Color.red)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+            }
+            .padding()
+        }
+    }
+    
+    private func deleteEntry(_ entry: ProteinEntry) {
+        if let index = proteinTracker.entriesForToday().firstIndex(where: { $0.id == entry.id }) {
+            proteinTracker.removeEntry(at: index)
+        }
     }
 
-    private func deleteEntry(at offsets: IndexSet) {
-          // Remove entries from proteinTracker's list
-          offsets.forEach { index in
-              proteinTracker.removeEntry(at: index)
-          }
-      }
-
     private func saveEdit() {
-        // Ensure that 'entryToEdit' is not nil and 'updatedEntryAmount' is valid
         if let entry = entryToEdit, updatedEntryAmount > 0 {
             proteinTracker.updateEntry(entry, with: updatedEntryAmount)
-            isEditing = false // Close the editing sheet by setting isEditing to false
+            isEditing = false // Close the editing sheet
             entryToEdit = nil // Reset the entry being edited
         }
     }
 }
+
 
 
 // Main Content View with TabView
