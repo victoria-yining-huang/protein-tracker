@@ -36,6 +36,15 @@ class ProteinTracker: ObservableObject {
             calendar.isDateInToday($0.date)
         }
     }
+    
+    func updateEntry(_ entry: ProteinEntry, with newAmount: Float) {
+           // Find the index of the entry to be updated
+           if let index = proteinEntries.firstIndex(where: { $0.id == entry.id }) {
+               let oldAmount = proteinEntries[index].amount
+               proteinEntries[index].amount = newAmount // Update the amount of the entry
+               totalProteinConsumed += newAmount - oldAmount // Adjust the total protein consumed
+           }
+       }
 }
 
 // Dashboard View
@@ -87,6 +96,9 @@ struct DashboardView: View {
 // Today's Entries View
 struct TodaysEntriesView: View {
     @StateObject var proteinTracker: ProteinTracker
+    @State private var isEditing = false
+    @State private var entryToEdit: ProteinEntry?
+    @State private var updatedEntryAmount: Float = 0.0
 
     var body: some View {
         List(proteinTracker.entriesForToday()) { entry in
@@ -95,10 +107,53 @@ struct TodaysEntriesView: View {
                 Spacer()
                 Text(entry.date, style: .time)
                     .foregroundColor(.gray)
+
+                Button(action: {
+                    entryToEdit = entry
+                    updatedEntryAmount = entry.amount // Set initial value in the field
+                    isEditing = true // Show edit form
+                }) {
+                    Text("Edit")
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
             }
+            .padding()
+        }
+        .sheet(isPresented: $isEditing) {
+            VStack {
+                Text("Edit Protein Entry")
+                    .font(.headline)
+                TextField("Enter new protein amount", value: $updatedEntryAmount, format: .number)
+                    .keyboardType(.decimalPad)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+                
+                Button(action: saveEdit) {
+                    Text("Save")
+                        .padding()
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+            }
+            .padding()
+        }
+    }
+
+    private func saveEdit() {
+        // Ensure that 'entryToEdit' is not nil and 'updatedEntryAmount' is valid
+        if let entry = entryToEdit, updatedEntryAmount > 0 {
+            proteinTracker.updateEntry(entry, with: updatedEntryAmount)
+            isEditing = false // Close the editing sheet by setting isEditing to false
+            entryToEdit = nil // Reset the entry being edited
         }
     }
 }
+
 
 // Main Content View with TabView
 struct ContentView: View {
