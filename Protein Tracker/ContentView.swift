@@ -96,53 +96,91 @@ struct DashboardView: View {
 // Today's Entries View
 struct TodaysEntriesView: View {
     @StateObject var proteinTracker: ProteinTracker
+    @State private var updatedEntryAmount: Float = 0.0
     @State private var isEditing = false
     @State private var entryToEdit: ProteinEntry?
-    @State private var updatedEntryAmount: Float = 0.0
 
     var body: some View {
-        List(proteinTracker.entriesForToday()) { entry in
-            HStack {
-                Text("\(entry.amount, specifier: "%.2f")g")
-                Spacer()
-                Text(entry.date, style: .time)
-                    .foregroundColor(.gray)
+        List {
+            // Display today's protein entries
+            ForEach(proteinTracker.entriesForToday()) { entry in
+                HStack {
+                    Text("\(entry.amount, specifier: "%.2f")g")
+                    Spacer()
+                    Text(entry.date, style: .time)
+                        .foregroundColor(.gray)
 
-                Button(action: {
-                    entryToEdit = entry
-                    updatedEntryAmount = entry.amount // Set initial value in the field
-                    isEditing = true // Show edit form
-                }) {
-                    Text("Edit")
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
+                    Button(action: {
+                        entryToEdit = entry
+                        updatedEntryAmount = entry.amount // Set initial value in the field
+                        isEditing = true // Show edit form
+                    }) {
+                        Text("Edit")
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
                 }
+                .padding()
+                .background(Color.white)
+                .cornerRadius(8)
             }
-            .padding()
+            .onDelete(perform: deleteEntry) // Add swipe-to-delete functionality
         }
-        .sheet(isPresented: $isEditing) {
-            VStack {
-                Text("Edit Protein Entry")
-                    .font(.headline)
-                TextField("Enter new protein amount", value: $updatedEntryAmount, format: .number)
-                    .keyboardType(.decimalPad)
-                    .padding()
-                    .background(Color(.systemGray6))
-                    .cornerRadius(10)
-                
-                Button(action: saveEdit) {
-                    Text("Save")
-                        .padding()
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-            }
-            .padding()
-        }
+        .listStyle(PlainListStyle()) // Optional: Use plain list style for a cleaner look
     }
+    
+//    var body: some View {
+//        List(proteinTracker.entriesForToday()) { entry in
+//            HStack {
+//                Text("\(entry.amount, specifier: "%.2f")g")
+//                Spacer()
+//                Text(entry.date, style: .time)
+//                    .foregroundColor(.gray)
+//
+//                Button(action: {
+//                    entryToEdit = entry
+//                    updatedEntryAmount = entry.amount // Set initial value in the field
+//                    isEditing = true // Show edit form
+//                }) {
+//                    Text("Edit")
+//                        .padding()
+//                        .background(Color.blue)
+//                        .foregroundColor(.white)
+//                        .cornerRadius(10)
+//                }
+//            }
+//            .padding()
+//        }
+//        .sheet(isPresented: $isEditing) {
+//            VStack {
+//                Text("Edit Protein Entry")
+//                    .font(.headline)
+//                TextField("Enter new protein amount", value: $updatedEntryAmount, format: .number)
+//                    .keyboardType(.decimalPad)
+//                    .padding()
+//                    .background(Color(.systemGray6))
+//                    .cornerRadius(10)
+//                
+//                Button(action: saveEdit) {
+//                    Text("Save")
+//                        .padding()
+//                        .background(Color.green)
+//                        .foregroundColor(.white)
+//                        .cornerRadius(10)
+//                }
+//            }
+//            .padding()
+//        }
+//    }
+    private func deleteEntry(at offsets: IndexSet) {
+          // Remove entries from proteinTracker's list
+          offsets.forEach { index in
+              let entry = proteinTracker.entriesForToday()[index]
+              proteinTracker.removeEntry(at: index)
+          }
+      }
 
     private func saveEdit() {
         // Ensure that 'entryToEdit' is not nil and 'updatedEntryAmount' is valid
