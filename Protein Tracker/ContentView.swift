@@ -130,54 +130,10 @@ struct TodaysEntriesView: View {
         }
         .listStyle(PlainListStyle()) // Optional: Use plain list style for a cleaner look
     }
-    
-//    var body: some View {
-//        List(proteinTracker.entriesForToday()) { entry in
-//            HStack {
-//                Text("\(entry.amount, specifier: "%.2f")g")
-//                Spacer()
-//                Text(entry.date, style: .time)
-//                    .foregroundColor(.gray)
-//
-//                Button(action: {
-//                    entryToEdit = entry
-//                    updatedEntryAmount = entry.amount // Set initial value in the field
-//                    isEditing = true // Show edit form
-//                }) {
-//                    Text("Edit")
-//                        .padding()
-//                        .background(Color.blue)
-//                        .foregroundColor(.white)
-//                        .cornerRadius(10)
-//                }
-//            }
-//            .padding()
-//        }
-//        .sheet(isPresented: $isEditing) {
-//            VStack {
-//                Text("Edit Protein Entry")
-//                    .font(.headline)
-//                TextField("Enter new protein amount", value: $updatedEntryAmount, format: .number)
-//                    .keyboardType(.decimalPad)
-//                    .padding()
-//                    .background(Color(.systemGray6))
-//                    .cornerRadius(10)
-//                
-//                Button(action: saveEdit) {
-//                    Text("Save")
-//                        .padding()
-//                        .background(Color.green)
-//                        .foregroundColor(.white)
-//                        .cornerRadius(10)
-//                }
-//            }
-//            .padding()
-//        }
-//    }
+
     private func deleteEntry(at offsets: IndexSet) {
           // Remove entries from proteinTracker's list
           offsets.forEach { index in
-              let entry = proteinTracker.entriesForToday()[index]
               proteinTracker.removeEntry(at: index)
           }
       }
